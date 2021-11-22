@@ -1,32 +1,31 @@
-const cheerio = require('cheerio');
-const axios = require('axios');
+const cheerio = require("cheerio");
+const axios = require("axios");
 
-async function main(){
-    const result = await axios.get(
-        "https://codingwithstefan.com/table-example"
-    );
-    const $ = cheerio.load(result.data);
-    let first = []
-    let second = []
-    let third = []
-    function appendResult(result,index,element,selector){
-        result.push($($(element).find(selector)[index]).text())
-        result.push('---------')
+const result = [];
+const url = "https://codingwithstefan.com/table-example"
+main = async (webLink) => {
+  aReturn = await axios.get(webLink);
+  const material = aReturn.data;
+  const $ = cheerio.load(material);
+  let tableHeaders = [];
+
+  $("body > table > tbody > tr").each((index, element) => {
+    if (index === 0) {
+      const ths = $(element).find("th");
+
+      ths.each((index, element) => {
+        tableHeaders.push($(element).text().toLowerCase());
+      });
+      return true;
     }
-    $("body > table > tbody > tr").each((index,element)=>{
-        
-        appendResult(first,0,element,"td")
-        appendResult(second,1,element,"td")
-        appendResult(third,2,element,"td")
-        // const ii = cheerio.load(element)
-        // ii('>td').each((index,element)=>{
-        //     console.log(ii(element).text())
-        // })
+    const tds = $(element).find("td");
+    const tableRow = {};
+    tds.each((index, element) => {
+      tableRow[tableHeaders[index]] = $(element).text();
+    });
+    result.push(tableRow);
+  });
+  console.log(result);
+};
 
-    })
-    console.log(first)
-    console.log(second)
-    console.log(third)
-}
-
-main()
+main(url);
