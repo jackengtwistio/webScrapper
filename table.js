@@ -4,8 +4,8 @@ const axios = require("axios");
 const result = [];
 const url = "https://codingwithstefan.com/table-example"
 main = async (webLink) => {
-  aReturn = await axios.get(webLink);
-  const material = aReturn.data;
+  response = await axios.get(webLink);
+  const material = response.data;
   const $ = cheerio.load(material);
   let tableHeaders = [];
 

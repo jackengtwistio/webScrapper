@@ -8,7 +8,6 @@ async function listsScrapper(page){
     await page.goto('https://newyork.craigslist.org/search/sof?')
     const html = await page.content()
     const $ = cheerio.load(html)
-    // $(".result-title").each((i,e)=>console.log(`${$(e).text()} link: ${$(e).attr("href")}\n`))
 
     const lists = $(".result-info").map((i,e) => { 
         const title = $(e).find(".result-title").text()
